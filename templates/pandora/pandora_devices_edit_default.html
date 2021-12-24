@@ -1,0 +1,21 @@
+
+<!-- Table 'pandora_devices' edit -->
+<form action="?" method="post" enctype="multipart/form-data" name="frmEdit" class="form-horizontal">
+[#if OK#]
+<div class="alert alert-success"><#LANG_DATA_SAVED#></div>
+[#endif OK#]
+[#if ERR#]
+<div class="alert alert-danger"><#LANG_FILLOUT_REQURED#></div>
+[#endif ERR#]
+[#if ID=""#]
+<legend><#LANG_NEW_RECORD#></legend>
+[#endif ID#]
+<div class="clearfix hidden-xs hidden-sm"></div>
+<div class="col-lg-6">
+<div class="col-lg-4">
+ <b><#LANG_TITLE#>:</b> [#TITLE#]<br>
+ <b>Модель:</b> [#MODEL#]</br>
+ <b>Телефон:</b> [#PHONE#]</br>
+ <b>Баланс SIM:</b> [#BALANCE#]
+</div>
+</div>

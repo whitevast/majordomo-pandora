@@ -1,0 +1,115 @@
+[#if VIEW_MODE="search_pandora_devices" || VIEW_MODE=""#]
+<div>
+<a class="btn btn-default" href="#api_settings" data-toggle="collapse"><i class="glyphicon glyphicon-cog"></i></a>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	
+	[#if CYCLERUN==1#]
+		<span class="label label-success" title="Статус цикла">Цикл запущен</span>
+	[#else#]
+		<span class="label label-danger" title="Статус цикла">Цикл остановлен</span>
+	[#endif#]
+	&nbsp;&nbsp;<img align="middle" src="../templates/pandora/pandora-logo.svg" height="25">
+  <!--# Кнопка 'Справка'. #-->
+     <a href="?view_mode=show_help" class="btn btn-default btn-sm float-right" title="Справка"><i class="glyphicon glyphicon-question-sign"></i></a>
+</div>
+[#else#]
+<a href="?view_mode=show_help" class="btn btn-default btn-sm float-right" title="Справка"><i class="glyphicon glyphicon-question-sign"></i></a>
+[#if ERR#]
+<a class="btn btn-default" href="#api_settings" data-toggle="collapse"><i class="glyphicon glyphicon-cog"></i></a>
+<div class="alert alert-danger">Неверное имя пользователя или пароль!</div>
+[#endif ERR#]
+[#endif VIEW_MODE#]
+<div class="collapse[#if ERR#] show[#endif ERR#]" id='api_settings'>
+&nbsp;
+<form action="?" method="post" enctype="multipart/form-data" name="frmEdit" class="form-horizontal">
+<fieldset>
+         <div class="form-group">
+				<label for="title" class="col-lg-1 control-label">
+				Имя пользователя:
+				</label>
+				<div class="col-lg-2"><input class="form-control" id="login" name="login" value="[#LOGIN#]" type="text" class="input"></div>
+				<div class="clearfix hidden-xs hidden-sm"></div>  
+				<label for="title" class="col-lg-1 control-label">
+				Пароль:
+				</label>
+				<div class="col-lg-2"><input class="form-control" id="password" name="password" value="[#PASSWORD#]" type="password" class="input"></div>
+				<div class="clearfix hidden-xs hidden-sm"></div>  
+				<label for="title" class="col-lg-1 control-label">
+				Периодичность опроса:
+				</label>
+				<div class="col-lg-2"><input class="form-control" id="cycle_time" name="cycle_time" value="[#CYCLE_TIME#]" type="text" class="input"></div>
+               <input type="checkbox" name="log_debmes" value="1"[#if LOG_DEBMES="1"#] checked[#endif#]> 
+               <span class='text' data-toggle="tooltip" title="Запись в отдельный лог-файл YYYY-mm-dd_pandora.log.">Отладка  DebMes</span>
+         </div>
+<div class="form-actions">
+<button type="submit" name="subm" value="Submit" class="btn btn-primary"><#LANG_UPDATE#></button>
+<input type="hidden" name="view_mode" value="update_settings">
+<input type="hidden" name="mode" value="update">
+</div>
+</fieldset>
+</form>
+</div>
+ <!-- action usual -->
+ [#if DATA_SOURCE="pandora_devices" || DATA_SOURCE=""#]
+ <!-- table pandora_devices search -->
+ [#if VIEW_MODE="search_pandora_devices" || VIEW_MODE=""#]
+  [#inc pandora_devices_search_admin.html#]
+ [#endif VIEW_MODE#]
+ <!-- / table pandora_devices search -->
+ <!-- table pandora_devices edit -->
+ [#if VIEW_MODE="edit_pandora_devices"#]
+   [#if ID!=""#]
+   [#if TITLE!=""#]<h4>[#TITLE#]</h4>[#endif TITLE#]
+<ul class="nav nav-tabs">
+  <li[#if TAB=""#] class="active"[#endif#]>
+   <a href="?data_source=<#DATA_SOURCE#>&view_mode=<#VIEW_MODE#>&id=<#ID#>&tab="><#LANG_GENERAL#></a>
+  </li>
+  <li[#if TAB="data"#] class="active"[#endif#]>
+   <a href="?data_source=<#DATA_SOURCE#>&view_mode=<#VIEW_MODE#>&id=<#ID#>&tab=data"><#LANG_DATA#></a>
+  </li>
+  <li[#if TAB="commands"#] class="active"[#endif#]>
+   <a href="?data_source=<#DATA_SOURCE#>&view_mode=<#VIEW_MODE#>&id=<#ID#>&tab=commands"><#LANG_COMMANDS#></a>
+  </li>
+</ul>
+&nbsp;<br/>
+   [#endif ID#]
+   [#if TAB=""#]
+    [#inc pandora_devices_edit_default.html#]
+   [#endif TAB#]
+   [#if TAB="data"#]
+    [#inc pandora_devices_edit_data.html#]
+   [#endif TAB#]
+   [#if TAB="commands"#]
+    [#inc pandora_devices_edit_commands.html#]
+   [#endif TAB#]
+ [#endif VIEW_MODE#]
+ <!-- / table pandora_devices edit -->
+ <!-- table pandora_devices view --> 
+ [#if VIEW_MODE="view_pandora_devices"#]
+   [#if TAB=""#]
+    [#inc pandora_devices_view_default.html#]
+   [#endif TAB#]
+ [#endif VIEW_MODE#]
+ <!-- / table pandora_devices view -->
+   <!--# Справка по модулю. #-->
+[#if VIEW_MODE="show_help"#]
+   [#inc ./help_ru.html#] 
+[#endif#]
+ [#endif DATA_SOURCE#]
+ <!-- action usual -->
+ [#if DATA_SOURCE="pandora_info"#]
+ <!-- table pandora_info search -->
+ [#if VIEW_MODE="search_pandora_info" || VIEW_MODE=""#]
+  [#inc pandora_info_search_admin.html#]
+ [#endif VIEW_MODE#]
+ <!-- / table pandora_info search -->
+ <!-- table pandora_info edit -->
+ [#if VIEW_MODE="edit_pandora_info"#]
+   [#inc pandora_info_edit.html#]
+ [#endif VIEW_MODE#]
+ <!-- / table pandora_info edit -->
+ <!-- table pandora_info view --> 
+ [#if VIEW_MODE="view_pandora_info"#]
+   [#inc pandora_info_view.html#]
+ [#endif VIEW_MODE#]
+ <!-- / table pandora_info view -->
+ [#endif DATA_SOURCE#]
