@@ -133,7 +133,7 @@ if ((time() - gg('cycle_pandoraRun')) < 25 ) {
  $out['LOG_DEBMES']=$this->config['LOG_DEBMES'];
  $out['CYCLE_TIME']=$this->config['CYCLE_TIME'];
  if (!$out['CYCLE_TIME']) {
-  $out['CYCLE_TIME']=20;
+  $out['CYCLE_TIME']=10;
  }
  if ($this->view_mode=='update_settings') {
    global $login;
@@ -143,6 +143,7 @@ if ((time() - gg('cycle_pandoraRun')) < 25 ) {
    global $log_debmes;
    $this->config['LOG_DEBMES']=$log_debmes;
    global $cycle_time;
+   if($cycle_time < 10) $cycle_time = 10;
    $this->config['CYCLE_TIME']=$cycle_time;
    $this->saveConfig();
    //Добавляем устройства//
