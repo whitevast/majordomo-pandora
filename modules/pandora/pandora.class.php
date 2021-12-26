@@ -572,10 +572,10 @@ function getdata($type, $cookies = "", $device = "", $command = "", $login = "",
 	}
 	if(isset($html['error_text'])){ //если ошибка
 		if($html['status'] == "Session is expired"){ //куки просрочились
-			$this-getConfig();
+			$this->getConfig();
 			$cookies = $this->getdata(1, "", "", "", $this->config['LOGIN'],  $this->config['PASSWORD']); //получаем новые куки
 			$this->config['COOKIES'] = $cookies;
-			$this-saveConfig();
+			$this->saveConfig();
 			return $this->getdata($type, $cookies, $command); //запускаем команду заново
 		}
 	}
