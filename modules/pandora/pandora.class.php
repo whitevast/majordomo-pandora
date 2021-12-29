@@ -168,7 +168,8 @@ if ((time() - gg('cycle_pandoraRun')) < 25 ) {
 				$rec['MODEL'] = $device['model'];
 				$rec['PHONE'] = $device['phone'];
 				$id = SQLInsert('pandora_devices', $rec);
-				$info = [['car_locked','Под охраной'],
+				$info = [['online','Онлайн'],
+				['car_locked','Под охраной'],
 				['alarm','Tревога'],
 				['engine','Двигатель заведен'],
 				['balance','Баланс СИМ-карты'],
@@ -225,7 +226,7 @@ if ((time() - gg('cycle_pandoraRun')) < 25 ) {
 				}
 				$commands = [['alarm','Вкл/откл охраны'],
 				['engine','Запуск/останов двигателя'],
-				['track','Вкл/откл трэкинга'],
+				['track','Вкл/откл трекинга'],
 				['temp','Вкл/откл подогревателя'],
 				['tk','Вкл/откл таймерного канала'],
 				['act_alarm','Вкл/откл активной охраны'],
@@ -402,9 +403,10 @@ function usual(&$out) {
    }
  }
  function processCycle() {
- $this->getConfig();
+  $this->getConfig();
   $devices = SQLSelect("SELECT * FROM pandora_devices");
   $data = $this->getdata(3, $this->config['COOKIES']);
+  if(!isset($data['stats'])) return;
   foreach($devices as $device){
 	  $info = SQLSelect("SELECT * FROM pandora_info WHERE DEVICE_ID='".$device['ID']."'");
 	  foreach($info as $inf){
@@ -415,27 +417,26 @@ function usual(&$out) {
 			  if(${'latitude'.$device['DEV_ID']} != $deviceinfo['x'] or ${'longitude'.$device['DEV_ID']} != $deviceinfo['y']){
 				  print(${'latitude'.$device['DEV_ID']}." ".$deviceinfo['x'].PHP_EOL);
 				  print(${'longitude'.$device['DEV_ID']}." ".$deviceinfo['y'].PHP_EOL);
-				${'latitude'.$device['DEV_ID']} = $deviceinfo['x'];
-			    ${'longitude'.$device['DEV_ID']} = $deviceinfo['y'];
+				  ${'latitude'.$device['DEV_ID']} = $deviceinfo['x'];
+			      ${'longitude'.$device['DEV_ID']} = $deviceinfo['y'];
 				  $url = BASE_URL . '/gps.php?latitude=' . $deviceinfo['x']
-				. '&longitude=' .$deviceinfo['y']
-				. '&altitude=0'
-				. '&accuracy=0'
-				. '&provider=0'
-				. '&speed='     .$deviceinfo['speed'] 
-				. '&battlevel=0'
-				. '&charging=0'
-				. '&deviceid='  .$device['TITLE']
-				. '&op=';
-				//print $url. "\n";
-				getURL($url, 0);
+				  . '&longitude=' .$deviceinfo['y']
+				  . '&altitude=0'
+				  . '&accuracy=0'
+				  . '&provider=0'
+				  . '&speed='     .$deviceinfo['speed'] 
+				  . '&battlevel=0'
+				  . '&charging=0'
+				  . '&deviceid='  .$device['TITLE']
+				  . '&op=';
+				  getURL($url, 0);
 			 }
 		  }
 		  if($inf['TITLE'] == 'balance'){
 			 if($inf['VALUE'] != $deviceinfo['balance']['value']){
 				$params['OLD_VALUE'] = $inf['VALUE'];
 				$params['NEW_VALUE'] = $deviceinfo['balance']['value'];
-				$this->setProperty($inf, $inf['VALUE'], $params);
+				$this->setProperty($inf, $deviceinfo[$inf['TITLE'], $params);
 				$inf['VALUE'] = $deviceinfo['balance']['value'];
 				$inf['UPDATED'] = date('Y-m-d H:i:s');
 				SQLUpdate('pandora_info', $inf);
@@ -443,14 +444,18 @@ function usual(&$out) {
 				SQLUpdate('pandora_devices', $device);
 			 }
 		  }
-		  else if($inf['VALUE'] != $deviceinfo[$inf['TITLE']]){
-			  $params['OLD_VALUE'] = $inf['VALUE'];
-		      $params['NEW_VALUE'] = $deviceinfo[$inf['TITLE']];
-			  $this->setProperty($inf, $inf['VALUE'], $params);
-			  $inf['VALUE'] = $deviceinfo[$inf['TITLE']];
-			  $inf['UPDATED'] = date('Y-m-d H:i:s');
-			  SQLUpdate('pandora_info', $inf);
+		  else{
+			  if(isset($deviceinfo[$inf['TITLE']])){
+			   if($inf['VALUE'] != $deviceinfo[$inf['TITLE']]){
+				  $params['OLD_VALUE'] = $inf['VALUE'];
+				  $params['NEW_VALUE'] = (int)$deviceinfo[$inf['TITLE']];
+				  $this->setProperty($inf, (int)$deviceinfo[$inf['TITLE'], $params);
+				  $inf['VALUE'] = $deviceinfo[$inf['TITLE']];
+				  $inf['UPDATED'] = date('Y-m-d H:i:s');
+				  SQLUpdate('pandora_info', $inf);
+			  }
 		  }
+		}
 	  }
   }
  }
