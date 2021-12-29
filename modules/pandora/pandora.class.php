@@ -249,7 +249,7 @@ if ((time() - gg('cycle_pandoraRun')) < 25 ) {
 		   }
 	   }
 	setGlobal('cycle_pandoraControl','restart');
-   $this->redirect("?");
+    $this->redirect("?");
    }
  }
  if (isset($this->data_source) && !$_GET['data_source'] && !$_POST['data_source']) {
@@ -415,8 +415,6 @@ function usual(&$out) {
 			  global ${'latitude'.$device['DEV_ID']};
 			  global ${'longitude'.$device['DEV_ID']};
 			  if(${'latitude'.$device['DEV_ID']} != $deviceinfo['x'] or ${'longitude'.$device['DEV_ID']} != $deviceinfo['y']){
-				  print(${'latitude'.$device['DEV_ID']}." ".$deviceinfo['x'].PHP_EOL);
-				  print(${'longitude'.$device['DEV_ID']}." ".$deviceinfo['y'].PHP_EOL);
 				  ${'latitude'.$device['DEV_ID']} = $deviceinfo['x'];
 			      ${'longitude'.$device['DEV_ID']} = $deviceinfo['y'];
 				  $url = BASE_URL . '/gps.php?latitude=' . $deviceinfo['x']
@@ -436,7 +434,7 @@ function usual(&$out) {
 			 if($inf['VALUE'] != $deviceinfo['balance']['value']){
 				$params['OLD_VALUE'] = $inf['VALUE'];
 				$params['NEW_VALUE'] = $deviceinfo['balance']['value'];
-				$this->setProperty($inf, $deviceinfo[$inf['TITLE'], $params);
+				$this->setProperty($inf, (int)$deviceinfo[$inf['TITLE']], $params);
 				$inf['VALUE'] = $deviceinfo['balance']['value'];
 				$inf['UPDATED'] = date('Y-m-d H:i:s');
 				SQLUpdate('pandora_info', $inf);
@@ -449,13 +447,13 @@ function usual(&$out) {
 			   if($inf['VALUE'] != $deviceinfo[$inf['TITLE']]){
 				  $params['OLD_VALUE'] = $inf['VALUE'];
 				  $params['NEW_VALUE'] = (int)$deviceinfo[$inf['TITLE']];
-				  $this->setProperty($inf, (int)$deviceinfo[$inf['TITLE'], $params);
+				  $this->setProperty($inf, (int)$deviceinfo[$inf['TITLE']], $params);
 				  $inf['VALUE'] = $deviceinfo[$inf['TITLE']];
 				  $inf['UPDATED'] = date('Y-m-d H:i:s');
 				  SQLUpdate('pandora_info', $inf);
-			  }
-		  }
-		}
+			   }
+		     }
+		 }
 	  }
   }
  }
