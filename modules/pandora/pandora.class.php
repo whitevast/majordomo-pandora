@@ -469,6 +469,29 @@ function setProperty($device, $value, $params = ''){
 	 callMethodSafe($device['LINKED_OBJECT'] . '.' . $device['LINKED_METHOD'], $params);
     }
 }
+
+// Глобальный поиск по модулю
+ function findData($data) {
+    $res = array();
+	//Pandora devices
+    $devices = SQLSelect("SELECT ID, TITLE, MODEL FROM pandora_devices where `TITLE` like '%" . DBSafe($data) . "%' OR `MODEL` like '%" . DBSafe($data) . "%' OR `PHONE` like '%" . DBSafe($data) . "%'  order by TITLE");
+	foreach($devices as $device){
+         $res[]= '&nbsp;<span class="label label-info">devices</span>&nbsp;<a href="/panel/pandora.html?md=pandora&inst=adm&data_source=&view_mode=edit_pandora_devices&id=' . $device['ID'] . '.html">' . $device['TITLE'].($device['MODEL'] ? '<small style="color: gray;padding-left: 5px;"><i class="glyphicon glyphicon-arrow-right" style="font-size: .8rem;vertical-align: text-top;color: lightgray;"></i> ' . $device['MODEL'] . '</small>' : ''). '</a>';
+    }
+    //Pandora info
+    $infos = SQLSelect("SELECT ID, TITLE, NAME, DEVICE_ID FROM pandora_info where `TITLE` like '%" . DBSafe($data) . "%' OR `NAME` like '%" . DBSafe($data) . "%' order by TITLE");
+    foreach($infos as $info){
+		$alarm = SQLSelectOne('SELECT TITLE FROM pandora_devices WHERE ID="'.$info['DEVICE_ID'].'"');
+		$res[]= '&nbsp;<span class="label label-info">'.$alarm['TITLE'].'</span>&nbsp;<span class="label label-primary">info</span>&nbsp;<a href="/panel/pandora.html?md=pandora&inst=adm&data_source=&view_mode=edit_pandora_devices&tab=data&id=' . $info['DEVICE_ID'] . '.html">' . $info['NAME'].'</a>';
+    }
+	 //Pandora commands
+    $cmds = SQLSelect("SELECT ID, TITLE, NAME, DEVICE_ID FROM pandora_info where `TITLE` like '%" . DBSafe($data) . "%' OR `NAME` like '%" . DBSafe($data) . "%' order by TITLE");
+    foreach($cmds as $cmd){
+		$alarm = SQLSelectOne('SELECT TITLE FROM pandora_devices WHERE ID="'.$info['DEVICE_ID'].'"');
+		$res[]= '&nbsp;<span class="label label-info">'.$alarm['TITLE'].'</span>&nbsp;<span class="label label-primary">command</span>&nbsp;<a href="/panel/pandora.html?md=pandora&inst=adm&data_source=&view_mode=edit_pandora_devices&tab=commands&id=' . $cmd['DEVICE_ID'] . '.html">' . $cmd['NAME'].'</a>';
+    }
+    return $res;
+ }
  
 /**
 * Install
@@ -597,7 +620,7 @@ function parsebit($dec){
 	$bin = strrev($bin);
 	$a = 63-strlen($bin);
 	for($i=1; $i<$a; $i++){
-		$bin=$bin."0";
+		$bin=$bin."0"; //если строка короче, чем нужно для парсинга, чтоб не выдавалось ошибок, добиваем нулями
 	}
 	$data['car_locked'] = $bin[0] == 1 ? 1 : 0;                         // под охраной;
 	$data['alarm'] = $bin[1] == 1 ? 1 : 0;                              // тревога;
