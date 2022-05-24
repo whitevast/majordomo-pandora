@@ -485,7 +485,7 @@ function setProperty($device, $value, $params = ''){
 		$res[]= '&nbsp;<span class="label label-info">'.$alarm['TITLE'].'</span>&nbsp;<span class="label label-primary">info</span>&nbsp;<a href="/panel/pandora.html?md=pandora&inst=adm&data_source=&view_mode=edit_pandora_devices&tab=data&id=' . $info['DEVICE_ID'] . '.html">' . $info['NAME'].'</a>';
     }
 	 //Pandora commands
-    $cmds = SQLSelect("SELECT ID, TITLE, NAME, DEVICE_ID FROM pandora_info where `TITLE` like '%" . DBSafe($data) . "%' OR `NAME` like '%" . DBSafe($data) . "%' order by TITLE");
+    $cmds = SQLSelect("SELECT ID, TITLE, NAME, DEVICE_ID FROM pandora_commands where `TITLE` like '%" . DBSafe($data) . "%' OR `NAME` like '%" . DBSafe($data) . "%' order by TITLE");
     foreach($cmds as $cmd){
 		$alarm = SQLSelectOne('SELECT TITLE FROM pandora_devices WHERE ID="'.$info['DEVICE_ID'].'"');
 		$res[]= '&nbsp;<span class="label label-info">'.$alarm['TITLE'].'</span>&nbsp;<span class="label label-primary">command</span>&nbsp;<a href="/panel/pandora.html?md=pandora&inst=adm&data_source=&view_mode=edit_pandora_devices&tab=commands&id=' . $cmd['DEVICE_ID'] . '.html">' . $cmd['NAME'].'</a>';
