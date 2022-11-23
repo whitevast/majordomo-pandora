@@ -588,22 +588,9 @@ function getdata($type, $cookies = "", $device = "", $command = "", $login = "",
 		curl_setopt($ch, CURLOPT_POST, 1);
 		curl_setopt($ch, CURLOPT_POSTFIELDS, $post);
 	}
-	//Считываем заголовки для определения сжатия ответа
-	curl_setopt($ch, CURLOPT_HEADERFUNCTION,
-		function($curl, $header) use (&$headers){
-			$len = strlen($header);
-			$header = explode(':', $header, 2);
-			if (count($header) < 2) // ignore invalid headers
-			return $len;
-			$headers[strtolower(trim($header[0]))][] = trim($header[1]);
-			return $len;
-		}
-	);
+	curl_setopt($ch,CURLOPT_ENCODING,'');
 	$html = curl_exec($ch);
 	curl_close($ch);
-	if(isset($headers['content-encoding'][0]) and $headers['content-encoding'][0] == 'gzip'){
-		$html = gzinflate(substr($html, 10));
-	}
 	$html = json_decode($html, true);
 	if($type == 1){
 		if(isset($html["session_id"])) return "sid=".$html["session_id"];
