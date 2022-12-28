@@ -435,8 +435,8 @@ function usual(&$out) {
 		  if($inf['TITLE'] == 'balance'){
 			 if($inf['VALUE'] != $deviceinfo['balance']['value']){
 				$params['OLD_VALUE'] = $inf['VALUE'];
-				$params['NEW_VALUE'] = $deviceinfo['balance']['value'];
-				$this->setProperty($inf, (int)$deviceinfo[$inf['TITLE']], $params);
+				$params['NEW_VALUE'] = (float)$deviceinfo['balance']['value'];
+				$this->setProperty($inf, (float)$deviceinfo[$inf['TITLE']], $params);
 				$inf['VALUE'] = $deviceinfo['balance']['value'];
 				$inf['UPDATED'] = date('Y-m-d H:i:s');
 				SQLUpdate('pandora_info', $inf);
@@ -448,8 +448,8 @@ function usual(&$out) {
 			  if(isset($deviceinfo[$inf['TITLE']])){
 			   if($inf['VALUE'] != $deviceinfo[$inf['TITLE']]){
 				  $params['OLD_VALUE'] = $inf['VALUE'];
-				  $params['NEW_VALUE'] = (int)$deviceinfo[$inf['TITLE']];
-				  $this->setProperty($inf, (int)$deviceinfo[$inf['TITLE']], $params);
+				  $params['NEW_VALUE'] = (float)$deviceinfo[$inf['TITLE']];
+				  $this->setProperty($inf, (float)$deviceinfo[$inf['TITLE']], $params);
 				  $inf['VALUE'] = $deviceinfo[$inf['TITLE']];
 				  $inf['UPDATED'] = date('Y-m-d H:i:s');
 				  SQLUpdate('pandora_info', $inf);
