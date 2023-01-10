@@ -407,26 +407,26 @@ function processCycle() {
 	$devices = SQLSelect("SELECT * FROM pandora_devices");
 	$data = $this->getdata(3, $this->config['COOKIES']);
 	if(!isset($data['stats'])) return;
-	global ${'latitude'.$device['DEV_ID']};
-	global ${'longitude'.$device['DEV_ID']};
 	foreach($devices as $device){
+		global ${'latitude'.$device['DEV_ID']};
+		global ${'longitude'.$device['DEV_ID']};
 		$info = SQLSelect("SELECT * FROM pandora_info WHERE DEVICE_ID='".$device['ID']."'");
 		$deviceinfo = array_merge($data['stats'][$device['DEV_ID']], $this->parsebit($data['stats'][$device['DEV_ID']]['bit_state_1']));
 		if(${'latitude'.$device['DEV_ID']} != $deviceinfo['x'] or ${'longitude'.$device['DEV_ID']} != $deviceinfo['y']){
 			if($deviceinfo['move']){
-			${'latitude'.$device['DEV_ID']} = $deviceinfo['x'];
-			${'longitude'.$device['DEV_ID']} = $deviceinfo['y'];
-			$url = BASE_URL . '/gps.php?latitude=' . $deviceinfo['x']
-			. '&longitude=' .$deviceinfo['y']
-			. '&altitude=0'
-			. '&accuracy=0'
-			. '&provider=0'
-			. '&speed='     .$deviceinfo['speed'] 
-			. '&battlevel=0'
-			. '&charging=0'
-			. '&deviceid='  .$device['TITLE']
-			. '&op=';
-			getURL($url, 0);
+				${'latitude'.$device['DEV_ID']} = $deviceinfo['x'];
+				${'longitude'.$device['DEV_ID']} = $deviceinfo['y'];
+				$url = BASE_URL . '/gps.php?latitude=' . $deviceinfo['x']
+				. '&longitude=' .$deviceinfo['y']
+				. '&altitude=0'
+				. '&accuracy=0'
+				. '&provider=0'
+				. '&speed='     .$deviceinfo['speed'] 
+				. '&battlevel=0'
+				. '&charging=0'
+				. '&deviceid='  .$device['TITLE']
+				. '&op=';
+				getURL($url, 0);
 			}
 		}
 		foreach($info as $inf){
