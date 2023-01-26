@@ -434,7 +434,7 @@ function processCycle() {
 				if($inf['VALUE'] != $deviceinfo['balance']['value']){
 					$params['OLD_VALUE'] = $inf['VALUE'];
 					$params['NEW_VALUE'] = (float)$deviceinfo['balance']['value'];
-					$this->setProperty($inf, (float)$deviceinfo[$inf['TITLE']], $params);
+					$this->setProperty($inf, (float)$deviceinfo['balance']['value'], $params);
 					$inf['VALUE'] = $deviceinfo['balance']['value'];
 					$inf['UPDATED'] = date('Y-m-d H:i:s');
 					SQLUpdate('pandora_info', $inf);
