@@ -20,11 +20,11 @@ $latest_check=0;
 if($pandora_module->config['CYCLE_TIME'] != "") $checkEvery = $pandora_module->config['CYCLE_TIME'];
 else $checkEvery = 20;
 $timeUpdate = 0;
-$gmp = false;
 if(PHP_INT_MAX == 2147483647){
-	if(extension_loaded('gmp')) $gmp = true;
-	elseif(method_exists($pandora_module, 'sendnotification')) {
-		$pandora_module->sendnotification('Обнаружена х86 версия PHP. Для корректной работы на Linux необходимо устаовить пакет php-gmp, на Windows включить расширение gmp в файле php.ini и перезапустить устройство. На стандартной уствновке файл находится по пути c:\_majordomo\server\config_tpl\.', 'warning');
+	if(!extension_loaded('gmp')){
+		if(method_exists($pandora_module, 'sendnotification')) {
+			$pandora_module->sendnotification('Обнаружена х86 версия PHP. Для корректной работы на Linux необходимо устаовить пакет php-gmp, на Windows включить расширение gmp в файле php.ini и перезапустить устройство. На стандартной уствновке файл находится по пути c:\_majordomo\server\config_tpl\.', 'warning');
+		}
 	}
 }
 while (1)

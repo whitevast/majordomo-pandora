@@ -589,8 +589,7 @@ function getdata($type, $cookies = "", $device = "", $command = "", $login = "",
 	curl_setopt($ch,CURLOPT_ENCODING,'');
 	$html = curl_exec($ch);
 	curl_close($ch);
-	if($type == 3 and $gmp) $html = $this->bit1str($html); //так как модуль может работать на 32bit системах, ограничение integer может портить результат расшифровки битового значения. Переделываем его в string НУЖЕН php-gmp!!!
-	$html = json_decode($html, true);
+	$html = json_decode($html, true, 512, JSON_BIGINT_AS_STRING);
 	if($type == 1){
 		if(isset($html["session_id"])) return "sid=".$html["session_id"];
 		else{
@@ -615,7 +614,7 @@ function getdata($type, $cookies = "", $device = "", $command = "", $login = "",
 }
 
 function parsebit($dec){
-	if($gmp) $bin = gmp_strval(gmp_init($dec), 2);
+	if(gettype($dec) == 'string' and extension_loaded('gmp')) $bin = gmp_strval(gmp_init($dec), 2);
 	else $bin = decbin($dec);
 	$bin = strrev($bin);
 	$a = 63-strlen($bin);
@@ -660,14 +659,6 @@ function parsebit($dec){
 	$data['zapret_oprosa_metok'] = $bin[60] == 1 ? 1 : 0;               // Запрет опроса меток
 	$data['zapret_snyatia_s_ohrani_bez_metki'] = $bin[61] == 1 ? 1 : 0; // Запрет снятия с охраны при отсутствии метки в зоне
 	return $data;
-}
-
-function bit1str($json){
-	$position1 = strpos($json, 'bit_state_1":')+13;
-	$position2 = strpos($json, ',', $position1)+1;
-	$json = substr_replace($json, '"', $position1, 0);
-	$json = substr_replace($json, '"', $position2, 0);
-	return $json;
 }
 
 function WriteLog($msg){
