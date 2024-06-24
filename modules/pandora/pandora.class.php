@@ -122,11 +122,6 @@ function run() {
 * @access public
 */
 function admin(&$out) {
-if (@(time() - gg('cycle_pandoraRun')) < 25 ) {
-	$out['CYCLERUN'] = 1;
- } else {
-	$out['CYCLERUN'] = 0;
- }
  $this->getConfig();
  $out['LOGIN']=$this->config['LOGIN'];
  $out['PASSWORD']=$this->config['PASSWORD'];
@@ -252,7 +247,7 @@ if (@(time() - gg('cycle_pandoraRun')) < 25 ) {
     $this->redirect("?");
    }
  }
- if (isset($this->data_source) && !$_GET['data_source'] && !$_POST['data_source']) {
+ if (isset($this->data_source) && !isset($_GET['data_source']) && !isset($_POST['data_source'])) {
   $out['SET_DATASOURCE']=1;
  }
  if ($this->data_source=='pandora_devices' || $this->data_source=='') {
@@ -269,9 +264,6 @@ if (@(time() - gg('cycle_pandoraRun')) < 25 ) {
    $this->delete_pandora_devices($this->id);
    $this->redirect("?data_source=pandora_devices");
   }
- }
- if (isset($this->data_source) && !$_GET['data_source'] && !$_POST['data_source']) {
-  $out['SET_DATASOURCE']=1;
  }
  if ($this->data_source=='pandora_info') {
   if ($this->view_mode=='' || $this->view_mode=='search_pandora_info') {
@@ -408,6 +400,7 @@ function processCycle() {
 	$data = $this->getdata(3, $this->config['COOKIES']);
 	if(!isset($data['stats'])) return;
 	foreach($devices as $device){
+		if(!isset($data['stats'][$device['DEV_ID']])) return;
 		global ${'latitude'.$device['DEV_ID']};
 		global ${'longitude'.$device['DEV_ID']};
 		$info = SQLSelect("SELECT * FROM pandora_info WHERE DEVICE_ID='".$device['ID']."'");
@@ -424,22 +417,24 @@ function processCycle() {
 				. '&speed='     .$deviceinfo['speed'] 
 				. '&battlevel=0'
 				. '&charging=0'
-				. '&deviceid='  .$device['TITLE']
+				. '&deviceid='  .str_replace(" ", "+", $device['TITLE'])
 				. '&op=';
 				getURL($url, 0);
 			}
 		}
 		foreach($info as $inf){
 			if($inf['TITLE'] == 'balance'){
-				if($inf['VALUE'] != $deviceinfo['balance']['value']){
-					$params['OLD_VALUE'] = $inf['VALUE'];
-					$params['NEW_VALUE'] = (float)$deviceinfo['balance']['value'];
-					$this->setProperty($inf, (float)$deviceinfo['balance']['value'], $params);
-					$inf['VALUE'] = $deviceinfo['balance']['value'];
-					$inf['UPDATED'] = date('Y-m-d H:i:s');
-					SQLUpdate('pandora_info', $inf);
-					$device['BALANCE'] = $deviceinfo['balance']['value'];
-					SQLUpdate('pandora_devices', $device);
+				if(isset($deviceinfo['balance']['value'])){
+					if($inf['VALUE'] != $deviceinfo['balance']['value']){
+						$params['OLD_VALUE'] = $inf['VALUE'];
+						$params['NEW_VALUE'] = (float)$deviceinfo['balance']['value'];
+						$this->setProperty($inf, (float)$deviceinfo['balance']['value'], $params);
+						$inf['VALUE'] = $deviceinfo['balance']['value'];
+						$inf['UPDATED'] = date('Y-m-d H:i:s');
+						SQLUpdate('pandora_info', $inf);
+						$device['BALANCE'] = $deviceinfo['balance']['value'];
+						SQLUpdate('pandora_devices', $device);
+					}
 				}
 			}
 			else{

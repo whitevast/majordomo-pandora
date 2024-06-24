@@ -47,7 +47,7 @@
   if ($this->tab=='data') {
    //dataset2
    $new_id=0;
-   global $delete_id;
+   $delete_id = gr('delete_id');
    if ($delete_id) {
     SQLExec("DELETE FROM pandora_info WHERE ID='".(int)$delete_id."'");
    }
@@ -76,28 +76,27 @@
    $out['PROPERTIES']=$properties;   
   }
   //Вкладка команды
-    if ($this->tab=='commands') {
-   $commands=SQLSelect("SELECT * FROM pandora_commands WHERE DEVICE_ID='".$rec['ID']."' ORDER BY ID");
-   $total=count($commands);
-   for($i=0;$i<$total;$i++) {
-    if ($commands[$i]['ID']==$new_id) continue;
-    if ($this->mode=='update') {
-	  $old_linked_object=$commands[$i]['LINKED_OBJECT'];
-      $old_linked_property=$commands[$i]['LINKED_PROPERTY'];
-      global ${'linked_object'.$commands[$i]['ID']};
-      $commands[$i]['LINKED_OBJECT']=trim(${'linked_object'.$commands[$i]['ID']});
-      global ${'linked_property'.$commands[$i]['ID']};
-      $commands[$i]['LINKED_PROPERTY']=trim(${'linked_property'.$commands[$i]['ID']});
-      SQLUpdate('pandora_commands', $commands[$i]);
-      if ($old_linked_object && $old_linked_object!=$commands[$i]['LINKED_OBJECT'] && $old_linked_property && $old_linked_property!=$commands[$i]['LINKED_PROPERTY']) {
-       removeLinkedProperty($old_linked_object, $old_linked_property, $this->name);
-      }
-      if ($commands[$i]['LINKED_OBJECT'] && $commands[$i]['LINKED_PROPERTY']) {
-       addLinkedProperty($commands[$i]['LINKED_OBJECT'], $commands[$i]['LINKED_PROPERTY'], $this->name);
-      }
-     }
-   }
-   $out['COMMANDS']=$commands;   
+   if ($this->tab=='commands') {
+	$commands=SQLSelect("SELECT * FROM pandora_commands WHERE DEVICE_ID='".$rec['ID']."' ORDER BY ID");
+	$total=count($commands);
+	for($i=0;$i<$total;$i++) {
+		if ($this->mode=='update') {
+		$old_linked_object=$commands[$i]['LINKED_OBJECT'];
+		$old_linked_property=$commands[$i]['LINKED_PROPERTY'];
+		global ${'linked_object'.$commands[$i]['ID']};
+		$commands[$i]['LINKED_OBJECT']=trim(${'linked_object'.$commands[$i]['ID']});
+		global ${'linked_property'.$commands[$i]['ID']};
+		$commands[$i]['LINKED_PROPERTY']=trim(${'linked_property'.$commands[$i]['ID']});
+		SQLUpdate('pandora_commands', $commands[$i]);
+		if ($old_linked_object && $old_linked_object!=$commands[$i]['LINKED_OBJECT'] && $old_linked_property && $old_linked_property!=$commands[$i]['LINKED_PROPERTY']) {
+		removeLinkedProperty($old_linked_object, $old_linked_property, $this->name);
+		}
+		if ($commands[$i]['LINKED_OBJECT'] && $commands[$i]['LINKED_PROPERTY']) {
+		addLinkedProperty($commands[$i]['LINKED_OBJECT'], $commands[$i]['LINKED_PROPERTY'], $this->name);
+		}
+		}
+	}
+	$out['COMMANDS']=$commands;   
   }
   if (is_array($rec)) {
    foreach($rec as $k=>$v) {
