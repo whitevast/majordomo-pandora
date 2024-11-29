@@ -403,10 +403,12 @@ function processCycle() {
 		if(!isset($data['stats'][$device['DEV_ID']])) return;
 		global ${'latitude'.$device['DEV_ID']};
 		global ${'longitude'.$device['DEV_ID']};
+		global ${'move'.$device['DEV_ID']};
 		$info = SQLSelect("SELECT * FROM pandora_info WHERE DEVICE_ID='".$device['ID']."'");
 		$deviceinfo = array_merge($data['stats'][$device['DEV_ID']], $this->parsebit($data['stats'][$device['DEV_ID']]['bit_state_1']));
 		if(${'latitude'.$device['DEV_ID']} != $deviceinfo['x'] or ${'longitude'.$device['DEV_ID']} != $deviceinfo['y']){
-			if($deviceinfo['move']){
+			if($deviceinfo['move'])	${'move'.$device['DEV_ID']} = true;
+			if(${'move'.$device['DEV_ID']}){
 				${'latitude'.$device['DEV_ID']} = $deviceinfo['x'];
 				${'longitude'.$device['DEV_ID']} = $deviceinfo['y'];
 				$url = BASE_URL . '/gps.php?latitude=' . $deviceinfo['x']
@@ -421,6 +423,7 @@ function processCycle() {
 				. '&op=';
 				getURL($url, 0);
 			}
+			if(!$deviceinfo['move']) ${'move'.$device['DEV_ID']} = false;
 		}
 		foreach($info as $inf){
 			if($inf['TITLE'] == 'balance'){
@@ -455,7 +458,7 @@ function processCycle() {
   //Запись в привязанное свойство
 function setProperty($device, $value, $params = ''){
     if ($device['LINKED_OBJECT'] && $device['LINKED_PROPERTY']) {
-		setGlobal($device['LINKED_OBJECT'] . '.' . $device['LINKED_PROPERTY'], $value, 0, 'pandora_module');
+		setGlobal($device['LINKED_OBJECT'] . '.' . $device['LINKED_PROPERTY'], $value, array($this->name=>1), $this->name);
     }
 	if ($device['LINKED_OBJECT'] && $device['LINKED_METHOD']) {
      $params['VALUE'] = $value;
