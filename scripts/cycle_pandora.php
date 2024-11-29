@@ -13,7 +13,7 @@ include_once(DIR_MODULES . 'pandora/pandora.class.php');
 $pandora_module = new pandora();
 $pandora_module->getConfig();
 $tmp = SQLSelectOne("SELECT ID FROM pandora_devices LIMIT 1");
-if (!$tmp['ID'])
+if (!isset($tmp['ID']))
    exit; // no devices added -- no need to run this cycle
 echo date("H:i:s") . " running " . basename(__FILE__) . PHP_EOL;
 $latest_check=0;

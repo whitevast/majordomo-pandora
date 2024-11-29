@@ -32,7 +32,7 @@
   }
   //UPDATING RECORD
    if ($ok) {
-    if ($rec['ID']) {
+    if (isset($rec['ID'])) {
      SQLUpdate($table_name, $rec); // update
     } else {
      $new_rec=1;
