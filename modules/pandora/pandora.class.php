@@ -131,13 +131,10 @@ function admin(&$out) {
   $out['CYCLE_TIME']=10;
  }
  if ($this->view_mode=='update_settings') {
-   global $login;
-   $this->config['LOGIN']=$login;
-   global $password;
-   $this->config['PASSWORD']=$password;
-   global $log_debmes;
-   $this->config['LOG_DEBMES']=$log_debmes;
-   global $cycle_time;
+   $this->config['LOGIN']=gr('login');
+   $this->config['PASSWORD']=gr('password');
+   $this->config['LOG_DEBMES']=gr('log_debmes');
+   $cycle_time = gr('cycle_time');
    if($cycle_time < 10) $cycle_time = 10;
    $this->config['CYCLE_TIME']=$cycle_time;
    $this->saveConfig();
@@ -574,7 +571,7 @@ function getdata($type, $cookies = "", $device = "", $command = "", $login = "",
 		'User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.2.12) Gecko/20101026 Firefox/3.6.12',
 		'Content-Type: application/json; charset=UTF-8',
 		'Accept: application/json',
-		'Accept-Encoding: gzip, deflate, br',
+		'Accept-Encoding: gzip, deflate, identity',
 	);
 	$ch = curl_init('https://pro.p-on.ru'.$path);
 	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);

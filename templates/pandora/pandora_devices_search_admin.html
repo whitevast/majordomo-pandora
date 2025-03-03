@@ -56,8 +56,10 @@
   <td width="1%" nowrap>
   <div>
   [#if "<#ACTION#>"=="admin"#]
-   <a href="?data_source=<#DATA_SOURCE#>&view_mode=edit_pandora_devices&id=[#ID#]" class="btn btn-default" title="Edit"><i class="glyphicon glyphicon-pencil"></i></a>
-    <a href="?data_source=<#DATA_SOURCE#>&view_mode=delete_pandora_devices&id=[#ID#]" onClick="return confirm('Are you sure? Please confirm.')" class="btn btn-default" title="Delete"><i class="glyphicon glyphicon-remove"></i></a>
+   <a href="?data_source=<#DATA_SOURCE#>&view_mode=edit_pandora_devices&id=[#ID#]" class="btn btn-default" title=<#LANG_MARKET_CATEGORY_INFORMATION#>><i class="glyphicon glyphicon-info-sign"></i></a>
+   <a href="?data_source=<#DATA_SOURCE#>&view_mode=edit_pandora_devices&id=[#ID#]&tab=data" class="btn btn-default" title=<#LANG_DATA#>><i class="glyphicon glyphicon-th-list"></i></a>
+   <a href="?data_source=<#DATA_SOURCE#>&view_mode=edit_pandora_devices&id=[#ID#]&tab=commands" class="btn btn-default" title=<#LANG_COMMANDS#>><i class="glyphicon glyphicon-flash"></i></a>
+   <a href="?data_source=<#DATA_SOURCE#>&view_mode=delete_pandora_devices&id=[#ID#]" onClick="return confirm('Are you sure? Please confirm.')" class="btn btn-default" title=<#LANG_DELETE#>><i class="glyphicon glyphicon-remove"></i></a>
   [#endif ACTION#]
   </div>
  </td>
