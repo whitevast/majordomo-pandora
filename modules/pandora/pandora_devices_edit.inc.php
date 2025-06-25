@@ -11,13 +11,6 @@
    $ok=1;
   // step: default
   if($this->tab=='') {
-   $rec['LOGIN']=gr('login');
-   $rec['PASSWORD']=gr('password');
-   if($rec['LOGIN']=='' or $rec['PASSWORD']=='') {
-    if($rec['LOGIN']=='') $out['ERR_ALERT']="Введите имя пользователя";
-	else if($rec['PASSWORD']=='') $out['ERR_ALERT']="Введите пароль";
-    $ok=0;
-   }
   //updating 'NAME' (varchar)
    $rec['NAME']=gr('name');
   //updating 'MODEL' (varchar)
